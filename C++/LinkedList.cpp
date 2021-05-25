@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cmath>
+#include<stack>
 
 using namespace std;
 
@@ -241,6 +242,9 @@ int size(node* head){
 }
 
 node* getNthNode(node* head,int pos){
+	/*
+		Return The N'th Node From the Linked List Using Iterative Method.
+	*/
 	node *temp = head;
 	int counter = 1;
 	if(counter == 0) return head;
@@ -256,6 +260,9 @@ node* getNthNode(node* head,int pos){
 }
 
 node* returnNthNode(node* head,int pos){
+	/*
+		Return N'th Node from the Linked List Using Recursive Method
+	*/
 	if(pos>length(head)){
 		node* notFind = NULL;
 		append(notFind,-1);
@@ -266,17 +273,187 @@ node* returnNthNode(node* head,int pos){
 }
 
 node* nthNodeFromEnd(node* head,int pos){
+	/*
+		Return The N'th Node From END in the Linked List.
+	*/
 	node* newhead1 = reverse(head);
 	head = reverse(newhead1);
 	return getNthNode(newhead1, pos);
 }
 
 int middle(node* head){
+	/*
+		Return the Middle node Value of the Linked List
+	*/
 	int len = length(head);
 	if(len%2!=0)
 		len++;
 	return getNthNode(head,len/2)->data;
 }
+
+int occurence(node* head,int key){
+	/*
+		Return The Position of the given Key in a Linked List
+	*/
+	node *temp = head;
+	int counter = 0;
+
+	while(temp!=NULL){
+		if(temp->data == key)
+			counter++;
+		temp = temp->next;
+	}
+	return counter;
+}
+
+int occurenceRecursive(node* head,int key){
+	/*
+		Return The Position of the given Key in Linked List.
+	*/
+	if(head==NULL)
+		return 0;
+	if(key == head->data)
+		return occurenceRecursive(head->next, key)+1;
+	else
+		return occurenceRecursive(head->next,key);
+}
+
+bool isPalindrome(node* head){
+	/*
+		Check The Linked List is Palindrome or Not Using Reverse Method
+	*/
+	node *temp = head;
+	node* newhead = reverse(head);
+	bool flag = true;
+	while(temp!=NULL){
+		if(temp->data != newhead->data)
+			flag = false;
+		temp = temp->next;
+	}
+	head = reverse(newhead);
+	return flag;
+}
+
+bool checkPalindrome(node* head){
+	/*
+		Check The Linked List is Palindrome or not Using Stack.
+	*/
+	stack<int> s;
+	node* temp = head;
+	while(temp!=NULL){
+		s.push(temp->data);
+		temp = temp->next;
+	}
+
+	while(head!=NULL){
+		int i = s.top();
+		s.pop();
+		if(head->data != i) return false;
+		head = head->next;
+	}
+	return true;
+}
+
+void makeCycle(node* &head,int pos){
+	/*
+		Make a cycle in a Linked List
+	*/
+	node *startNode;
+	node* temp = head;
+	int counter = 0;
+	while(temp->next != NULL){
+		if(counter == pos)
+			startNode = temp;
+		temp = temp->next;
+		counter++;
+	}
+	temp->next = startNode;
+}
+
+bool detectCycle(node* &head){
+	/*
+		return True if cycle present in the Linked List
+		Otherwise Return False
+	*/
+	node* slow = head;
+	node* fast = head;
+	while(fast!=NULL and fast->next!=NULL){
+		slow = slow->next;
+		fast = fast->next->next;
+		if(slow == fast) return true;
+	}
+	return false;
+}
+
+int lengthOfLoop(node* head){
+	/*
+		return length of the loop in a Linked List
+	*/
+	node *slow = head;
+	node *fast = head;
+	node *startptr;
+
+	while(fast!=NULL and fast->next != NULL){
+		slow = slow->next;
+		fast = fast->next->next;
+		if(slow == fast){
+			startptr = slow;
+			break;
+		}
+	}
+	if(fast->next == NULL) return 0;
+	int counter = 1;
+	startptr = startptr ->next;
+	while(startptr != fast){
+		startptr = startptr->next;
+		counter++;
+	}
+	return counter;
+}
+
+void swapNodes(node* &head,int x,int y) {
+	node *prevX = NULL;
+	node* currX = head;
+	node *prevY = NULL;
+	node* currY = head;
+
+	// search for x and track prev pointer
+	while(currX != NULL && currX->data != x){
+		prevX = currX;
+		currX = currX->next;
+	}
+
+	// search for y and track prev pointer
+	while(currY!=NULL && currY->data != y){
+		prevY = currY;
+		currY = currY->next;
+	}
+
+	// if x or y any one element not present then return
+	if(currX == NULL || currY==NULL) return;
+
+	// if x is not head of the linked list
+	if(prevX != NULL){
+		prevX->next = currY;
+	}else{ // else make currY as a head of the Linked List
+		head = currY;
+	}
+
+	// if y is not head of the Linked list
+	if(prevY!=NULL){
+		prevY->next = currX;
+	}else{ // else make currX as a head of the Linked list
+		head = currX;
+	} 
+
+	// swap next pointers
+	node *temp = currX->next;
+	currX->next = currY->next;
+	currY->next = temp;
+
+}
+
+
 
 
 int main(){
@@ -286,52 +463,20 @@ int main(){
 	append(head,2);
 	append(head,3);
 	append(head,4);
-	// print(head);
-
-	insertAtFirst(head,5);
-	insertAtFirst(head,6);
-	insertAtFirst(head,7);
-	// print(head);
-
-	// pop(head);
-	// print(head);
-
-	// deletion(head,1);
-	// print(head);
-
-	// deleteAtFirst(head);
-	// print(head);
-
-	insertAfter(head,5,10);
+	// insertAtFirst(head,2);
+	// insertAtFirst(head,3);
+	// insertAtFirst(head,4);
 	print(head);
 
-	// cout<<search(head,10)<<endl;
-	// cout<<find(head, 1)<<endl;
-
-	// node* newhead = reverse(head);
-	// print(newhead);
-
-	// node* newhead1 = reverseRecursive(head);
-	// print(newhead1);
-
-	// deleteLinedList(newhead1);
-	// print(newhead1);
-
-	// deleteAt(newhead1,4);
-	// print(newhead1);
-
-	// cout << length(newhead1) << endl;
-	// cout << size(newhead1) << endl;
-	// cout << getNthNode(newhead1,2)->data<<endl;
-	// cout << returnNthNode(newhead,15)->data<<endl;
-
-	// cout << nthNodeFromEnd(head, 12)->data << endl;
+	// makeCycle(head,2);
+	// cout << detectCycle(head) << endl;
+	// cout << lengthOfLoop(head) << endl;
+	// swapNodes(head, 4, 2);
+	// swapNodes(head, 3, 4);
+	// swapNodes(head, 2, 4);
 	// print(head);
-
-	// cout << middle(head) << endl;
-
-	
-	
+	// swapNodes(head, 1, 3);
+	// print(head);
 
 	return 0;
 }
