@@ -1,16 +1,17 @@
 #include<iostream>
+#include "SinglyLinkedList.h"
 
-using namespace std;
 
 int main(){
+    node *head = NULL;
 
-	node* head = NULL;
-	append(head,1);
-	append(head,2);
-	append(head,3);
-	append(head,4);
-	append(head,5);
-	append(head,6);
-	print(head);
-	return 0;
+    append(head, 10);
+    append(head, 20);
+    append(head, 30);
+    append(head, 40);
+    print(head);
+    insertAfter(head, 20, 50);
+    print(head);
+    cout << length(head);
+    
 }
