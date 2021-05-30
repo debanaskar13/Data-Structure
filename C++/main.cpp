@@ -2,6 +2,7 @@
 #include "SinglyLinkedList.h"
 
 
+
 int main(){
     node *head = NULL;
 
@@ -12,6 +13,4 @@ int main(){
     print(head);
     insertAfter(head, 20, 50);
     print(head);
-    cout << length(head);
-    
 }
